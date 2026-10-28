@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tenaza | Hamburguesas smash en Córdoba</title>
+  <meta name="description" content="Tenaza: hamburguesas smash de 110 gr. Elegí una de la casa o armá la tuya con toppings y salsas. Todas salen con papas. Pedí por WhatsApp.">
+  <meta name="theme-color" content="#E10717">
+  <meta property="og:title" content="Tenaza | Hamburguesas smash">
+  <meta property="og:description" content="Elegí una de la casa o armá la tuya. Todas salen con papas.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="img/promo-walters.jpg">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="saltar" href="#menu">Saltar al menú</a>
+
+  <header class="cabecera" id="inicio-top">
+    <div class="cabecera__fila contenedor">
+      <a class="marca" href="#inicio" aria-label="Tenaza, ir al inicio">
+        <img src="img/logo.png" alt="Logo de Tenaza" width="52" height="52">
+      </a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="nav" aria-label="Abrir menú de navegación">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav" aria-label="Principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#menu">Menú</a>
+        <a href="#promociones">Promociones</a>
+        <a href="#contacto">Contacto</a>
+        <a class="boton boton--claro" href="#" data-whatsapp data-mensaje="Hola! Quiero hacer un pedido.">Pedir por WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio" aria-labelledby="hero-titulo">
+      <div class="hero__fila contenedor">
+        <div class="hero__texto">
+          <h1 id="hero-titulo">Smash burgers que te agarran fuerte</h1>
+          <p>Carne smash de 110 gr. Elegí una de la casa o armá la tuya con tus toppings y salsas favoritas. Todas salen con papas.</p>
+          <div class="hero__botones">
+            <a class="boton boton--claro" href="#menu">Ver el menú</a>
+            <a class="boton boton--borde" href="#" data-whatsapp data-mensaje="Hola! Quiero hacer un pedido.">Hacer un pedido</a>
+          </div>
+        </div>
+        <div class="hero__fotos" aria-hidden="false">
+          <img class="hero__foto hero__foto--a" src="img/burgers/la-big.jpg" alt="Hamburguesa La Big con doble carne smash, cheddar y pimientos salteados" width="250" height="170">
+          <img class="hero__foto hero__foto--b" src="img/burgers/walters.jpg" alt="Hamburguesa Walter's con huevo, panceta y cebolla crispy" width="250" height="170">
+          <span class="sello">¡Sale con papas!</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion seccion--crema" id="menu" aria-labelledby="menu-titulo">
+      <div class="contenedor">
+        <h2 id="menu-titulo">Menú</h2>
+        <div class="filtros" role="group" aria-label="Filtrar el menú por categoría" id="filtros"></div>
+        <div class="grilla" id="grilla-menu" aria-live="polite"></div>
+        <p class="nota">Todas las hamburguesas salen con papas.</p>
+      </div>
+    </section>
+
+    <section class="seccion seccion--rojo" id="promociones" aria-labelledby="promo-titulo">
+      <div class="contenedor promo">
+        <img class="promo__imagen" src="img/promo-walters.jpg" alt="Promoción: una Walter's con papas y una lata de Pepsi. Tenaza, Tenaza." width="450" height="600" loading="lazy">
+        <div class="promo__texto">
+          <h2 id="promo-titulo">Una Walter's, con papas</h2>
+          <p>Carne smash (110gr), mayo de ajo, cheddar, huevo, panceta y cebolla crispy. Sale con papas.</p>
+          <p class="pendiente" data-pendiente="Precio y condiciones de la promoción">[Completar: precio y condiciones]</p>
+          <a class="boton boton--claro" href="#" data-whatsapp data-mensaje="Hola! Quiero consultar por la promo de la Walter's.">Consultar la promo</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion seccion--crema" id="contacto" aria-labelledby="contacto-titulo">
+      <div class="contenedor contacto">
+        <div>
+          <h2 id="contacto-titulo">Pedí por WhatsApp</h2>
+          <p>Escribinos con lo que querés y te respondemos.</p>
+          <a class="boton boton--rojo" href="#" data-whatsapp data-mensaje="Hola! Quiero hacer un pedido.">Abrir WhatsApp</a>
+        </div>
+        <dl class="datos" id="datos-contacto"></dl>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor pie__fila">
+      <img src="img/logo.png" alt="Logo de Tenaza" width="64" height="64" loading="lazy">
+      <nav aria-label="Pie de página">
+        <a href="#inicio">Inicio</a>
+        <a href="#menu">Menú</a>
+        <a href="#promociones">Promociones</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <p id="pie-redes"></p>
+      <p class="pie__copy">© <span id="anio"></span> Tenaza. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/menu-data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
