@@ -39,12 +39,14 @@ a { color: inherit; }
 .boton--rojo:hover { background: var(--tinta); }
 
 /* ===== Cabecera ===== */
-.cabecera { position: sticky; top: 0; z-index: 50; background: var(--rojo); color: var(--blanco); }
+.cabecera { position: sticky; top: 0; z-index: 50; background: var(--tinta); color: var(--blanco); border-bottom: 3px solid var(--rojo); }
+.cabecera :focus-visible { outline-color: var(--blanco); box-shadow: none; }
+.cabecera .boton--claro:hover { background: var(--rojo); color: var(--blanco); }
 .cabecera__fila { display: flex; align-items: center; justify-content: space-between; height: var(--alto-cabecera); }
 .marca img { border-radius: 50%; }
 .burger { display: grid; gap: 6px; padding: .75rem; background: none; border: 0; cursor: pointer; }
 .burger span { display: block; width: 26px; height: 3px; background: var(--blanco); border-radius: 2px; }
-.nav { position: absolute; inset: var(--alto-cabecera) 0 auto 0; display: none; flex-direction: column; gap: .25rem; padding: 1rem 1.25rem 1.5rem; background: var(--rojo); border-top: 2px solid rgb(255 255 255 / .3); }
+.nav { position: absolute; inset: var(--alto-cabecera) 0 auto 0; display: none; flex-direction: column; gap: .25rem; padding: 1rem 1.25rem 1.5rem; background: var(--tinta); border-top: 2px solid rgb(255 255 255 / .3); }
 .nav--abierto { display: flex; }
 .nav a:not(.boton) { padding: .75rem 0; font-weight: 800; text-decoration: none; }
 .nav a:not(.boton):hover { text-decoration: underline; text-underline-offset: 6px; }
@@ -87,7 +89,22 @@ a { color: inherit; }
 .listas { display: grid; gap: 1rem; margin-bottom: 1rem; }
 .chips { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; margin: 0; padding: 0; }
 .chips li { padding: .2rem .7rem; border-radius: 999px; background: rgb(255 255 255 / .18); font-size: .95rem; }
-.tarjeta--bebidas .boton { margin-top: auto; }
+
+/* Toppings y salsas seleccionables */
+.chips--elegir li { padding: 0; background: none; }
+.chip { font: inherit; font-size: .95rem; padding: .45rem .9rem; border-radius: 999px; border: 2px solid rgb(255 255 255 / .55); background: transparent; color: var(--blanco); cursor: pointer; transition: background .15s, color .15s; }
+.chip:hover { background: rgb(255 255 255 / .18); }
+.chip[aria-pressed="true"], .opcion__input:checked + .chip { background: var(--blanco); border-color: var(--blanco); color: var(--rojo-oscuro); font-weight: 800; }
+.chip[aria-pressed="true"]::before, .opcion__input:checked + .chip::before { content: "✓ "; }
+.opcion { position: relative; display: block; }
+.opcion__input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.opcion:hover .chip { background: rgb(255 255 255 / .18); }
+.opcion:hover .opcion__input:checked + .chip { background: var(--blanco); }
+.opcion__input:focus-visible + .chip { outline: 3px solid var(--blanco); outline-offset: 3px; }
+.bebidas { margin-bottom: 1rem; }
+.resumen { font-weight: 600; margin: .25rem 0 .5rem; }
+.enlace-boton { align-self: flex-start; padding: .25rem 0; margin-bottom: 1rem; background: none; border: 0; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
+.pedir-titulo { margin-top: .25rem; }
 .nota { margin-top: 1.5rem; font-weight: 600; }
 
 /* ===== Promociones ===== */

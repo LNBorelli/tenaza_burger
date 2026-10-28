@@ -47,32 +47,32 @@ const MENU = [
   {
     categoria: "arma",
     nombre: "Armá tu hamburguesa",
-    descripcion: "Elegí el tamaño, sumá los toppings y las salsas que quieras. Sale con papas.",
+    descripcion: "Marcá los toppings, las salsas y la bebida que quieras y tocá un tamaño: se abre WhatsApp con tu pedido armado. Sale con papas.",
     tamanios: "arma",
     toppings: ["Queso Cheddar", "Queso Tybo", "Queso azul", "Bacon", "Huevo a la plancha", "Lechuga",
                "Tomate", "Cebolla caramelizada", "Cebolla crispy", "Pimientos salteados", "Hongos salteados"],
     salsas: ["Mayo casera", "Mayo de berenjenas", "Blend de champiñones", "Salsa guacamole",
              "Mermelada de bacon", "Mil Islas", "Mostaza", "Ketchup"],
   },
-  {
-    categoria: "bebidas",
-    nombre: "Bebidas",
-    descripcion: "Pepsi Black, Pepsi y 7up.",
-    precio: "$2000",
-  },
 ];
+
+/* Bebida opcional dentro de "Armá tu hamburguesa". */
+const BEBIDAS = {
+  precio: "$ 2.000",
+  opciones: ["Pepsi Black", "Pepsi", "7UP"],
+};
 
 /* Precios tal cual figuran en cada imagen de menú. */
 const TAMANIOS = {
   casa: [
-    { nombre: "Simple", precio: "$13.500" },
-    { nombre: "Doble", precio: "$15.500" },
-    { nombre: "Triple", precio: "$17.000" },
+    { nombre: "Simple", precio: "$ 13.500" },
+    { nombre: "Doble", precio: "$ 15.500" },
+    { nombre: "Triple", precio: "$ 17.000" },
   ],
   arma: [
-    { nombre: "Simple", precio: "$15.000" },
-    { nombre: "Doble", precio: "$17.500" },
-    { nombre: "Triple", precio: "$19.500" },
+    { nombre: "Simple", precio: "$ 15.000" },
+    { nombre: "Doble", precio: "$ 17.500" },
+    { nombre: "Triple", precio: "$ 19.500" },
   ],
 };
 
@@ -80,5 +80,4 @@ const CATEGORIAS = [
   { id: "todo", nombre: "Todo" },
   { id: "casa", nombre: "De la casa" },
   { id: "arma", nombre: "Armá la tuya" },
-  { id: "bebidas", nombre: "Bebidas" },
 ];

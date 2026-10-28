@@ -28,23 +28,91 @@ document.querySelectorAll("[data-whatsapp]").forEach((a) => {
 });
 
 /* ---------- Menú: tarjetas ---------- */
-function crearTamanios(producto) {
+
+/* Selección de "Armá tu hamburguesa". Vive fuera de las tarjetas para que
+   no se pierda al cambiar de filtro (las tarjetas se vuelven a crear). */
+const seleccionArma = { toppings: new Set(), salsas: new Set(), bebida: null };
+
+/* Devuelve lo elegido respetando el orden del menú. */
+function elegidos(producto, clave) {
+  return producto[clave].filter((item) => seleccionArma[clave].has(item));
+}
+
+function mensajeArma(producto, tamanio) {
+  const lista = (clave) => {
+    const items = elegidos(producto, clave);
+    return items.length ? items.map((i) => `- ${i}`).join("\n") : "- Sin elegir";
+  };
+  return [
+    `Hola! Quiero armar mi hamburguesa *${tamanio.nombre}* (${tamanio.precio}).`,
+    "",
+    "*Toppings:*",
+    lista("toppings"),
+    "",
+    "*Salsas:*",
+    lista("salsas"),
+    "",
+    "*Bebida:*",
+    seleccionArma.bebida ? `- ${seleccionArma.bebida} (${BEBIDAS.precio})` : "- Sin bebida",
+    "",
+    "Sale con papas.",
+  ].join("\n");
+}
+
+function textoResumen(producto) {
+  const t = elegidos(producto, "toppings");
+  const s = elegidos(producto, "salsas");
+  const bebida = seleccionArma.bebida;
+  if (!t.length && !s.length && !bebida) return "Todavía no elegiste toppings, salsas ni bebida.";
+  return `Tu elección: ${[...t, ...s].join(", ") || "sin toppings ni salsas"}. Bebida: ${bebida || "sin bebida"}.`;
+}
+
+/* mensajeDe(tamanio) arma el texto de WhatsApp. Si no se pasa, usa el mensaje simple. */
+function crearTamanios(producto, mensajeDe) {
+  const mensaje = mensajeDe || ((t) => `Hola! Quiero pedir ${producto.nombre} ${t.nombre} (${t.precio}).`);
   const fila = el("div", { className: "tamanios" });
-  TAMANIOS[producto.tamanios].forEach((t) => {
-    const a = el("a", { className: "tamanio", href: urlWhatsapp(`Hola! Quiero pedir ${producto.nombre} ${t.nombre} (${t.precio}).`) }, [
+  const enlaces = TAMANIOS[producto.tamanios].map((t) => {
+    const a = el("a", { className: "tamanio" }, [
       el("span", { className: "tamanio__nombre", text: t.nombre }),
       el("span", { className: "tamanio__precio", text: t.precio }),
     ]);
     abrirEnNuevaPestania(a);
     fila.append(a);
+    return { a, t };
   });
+  /* Vuelve a calcular el enlace de cada botón (se usa cuando cambia la selección). */
+  fila.actualizarEnlaces = () => enlaces.forEach(({ a, t }) => { a.href = urlWhatsapp(mensaje(t)); });
+  fila.actualizarEnlaces();
   return fila;
 }
 
-function crearLista(titulo, items) {
-  return el("div", {}, [
-    el("h4", { text: titulo }),
-    el("ul", { className: "chips" }, items.map((i) => el("li", { text: i }))),
+function crearSelector(titulo, items, seleccion, alCambiar) {
+  const botones = items.map((item) => {
+    const b = el("button", { className: "chip", type: "button", "aria-pressed": String(seleccion.has(item)), text: item });
+    b.addEventListener("click", () => {
+      if (seleccion.has(item)) seleccion.delete(item); else seleccion.add(item);
+      b.setAttribute("aria-pressed", String(seleccion.has(item)));
+      alCambiar();
+    });
+    return el("li", {}, [b]);
+  });
+  return el("div", {}, [el("h4", { text: titulo }), el("ul", { className: "chips chips--elegir" }, botones)]);
+}
+
+/* Bebida opcional: una sola opción a la vez (radio nativo, funciona con teclado). */
+function crearBebidas(alCambiar) {
+  const items = ["", ...BEBIDAS.opciones].map((opcion) => {
+    const input = el("input", { className: "opcion__input", type: "radio", name: "bebida", value: opcion });
+    input.checked = (seleccionArma.bebida || "") === opcion;
+    input.addEventListener("change", () => {
+      seleccionArma.bebida = opcion || null;
+      alCambiar();
+    });
+    return el("li", {}, [el("label", { className: "opcion" }, [input, el("span", { className: "chip", text: opcion || "Sin bebida" })])]);
+  });
+  return el("div", { className: "bebidas" }, [
+    el("h4", { text: `Bebida (${BEBIDAS.precio})` }),
+    el("ul", { className: "chips chips--elegir" }, items),
   ]);
 }
 
@@ -64,17 +132,38 @@ function crearTarjeta(p) {
     )));
   }
 
+  const fila = p.tamanios ? crearTamanios(p, p.toppings ? (t) => mensajeArma(p, t) : undefined) : null;
+
   if (p.toppings) {
-    tarjeta.append(el("div", { className: "listas" }, [crearLista("Toppings", p.toppings), crearLista("Salsas", p.salsas)]));
+    const resumen = el("p", { className: "resumen", "aria-live": "polite" });
+    const actualizar = () => {
+      resumen.textContent = textoResumen(p);
+      fila.actualizarEnlaces();
+    };
+    const borrar = el("button", { className: "enlace-boton", type: "button", text: "Borrar selección" });
+    borrar.addEventListener("click", () => {
+      seleccionArma.toppings.clear();
+      seleccionArma.salsas.clear();
+      seleccionArma.bebida = null;
+      tarjeta.querySelectorAll(".chip[aria-pressed]").forEach((c) => c.setAttribute("aria-pressed", "false"));
+      tarjeta.querySelector('.opcion__input[value=""]').checked = true;
+      actualizar();
+    });
+    tarjeta.append(
+      el("div", { className: "listas" }, [
+        crearSelector("Toppings", p.toppings, seleccionArma.toppings, actualizar),
+        crearSelector("Salsas", p.salsas, seleccionArma.salsas, actualizar),
+      ]),
+      crearBebidas(actualizar),
+      resumen,
+      borrar,
+      el("h4", { className: "pedir-titulo", text: "Elegí el tamaño y pedí por WhatsApp" })
+    );
+    actualizar();
   }
 
-  if (p.tamanios) tarjeta.append(crearTamanios(p));
+  if (fila) tarjeta.append(fila);
 
-  if (p.precio) {
-    const a = el("a", { className: "boton boton--claro", href: urlWhatsapp("Hola! Quiero sumar bebidas a mi pedido.") }, [`Pedir bebida · ${p.precio}`]);
-    abrirEnNuevaPestania(a);
-    tarjeta.append(a);
-  }
   return tarjeta;
 }
 
